@@ -28,3 +28,4 @@ ProdutoModel.init({
 });
 
 export default ProdutoModel;
+

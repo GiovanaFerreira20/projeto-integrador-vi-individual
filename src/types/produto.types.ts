@@ -13,3 +13,4 @@ export interface ProdutoAtualizacao {
     nome?: string;
     preco?: number;
 }
+

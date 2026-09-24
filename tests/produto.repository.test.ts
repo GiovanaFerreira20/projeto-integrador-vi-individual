@@ -79,3 +79,4 @@ describe('ProdutoRepository (integração com SQLite em memória)', () => {
         expect(resultado).toBeNull();
     });
 });
+

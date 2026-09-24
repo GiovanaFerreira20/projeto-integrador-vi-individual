@@ -16,3 +16,4 @@ app.get('/api-docs.json', (req, res) => {
 app.use(produtoRoutes);
 
 export default app;
+

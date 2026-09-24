@@ -63,3 +63,4 @@ export async function deletar(req: Request, res: Response): Promise<Response | v
 
     res.status(204).send();
 }
+

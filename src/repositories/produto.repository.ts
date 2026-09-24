@@ -45,3 +45,4 @@ class ProdutoRepository implements IProdutoRepository {
 }
 
 export default ProdutoRepository;
+

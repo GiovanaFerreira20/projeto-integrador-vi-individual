@@ -142,3 +142,4 @@ router.put('/produtos/:id', controller.atualizar);
 router.delete('/produtos/:id', controller.deletar);
 
 export default router;
+

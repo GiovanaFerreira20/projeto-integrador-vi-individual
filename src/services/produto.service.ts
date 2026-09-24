@@ -33,3 +33,4 @@ export class ProdutoService {
 const produtoService = new ProdutoService();
 
 export default produtoService;
+

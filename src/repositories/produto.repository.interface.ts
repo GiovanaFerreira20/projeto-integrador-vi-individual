@@ -7,3 +7,4 @@ export interface IProdutoRepository {
     atualizar(id: number, dados: ProdutoAtualizacao): Promise<Produto | null>;
     deletar(id: number): Promise<Produto | null>;
 }
+
