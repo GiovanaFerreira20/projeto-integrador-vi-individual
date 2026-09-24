@@ -8,12 +8,11 @@ const options = {
             version: '1.0.0',
             description: 'API REST com CRUD completo de produtos, persistência via Sequelize e banco de dados relacional (SQLite).'
         },
-        servers: [
-            {
-                url: 'http://localhost:3000',
-                description: 'Servidor local'
-            }
-        ],
+        info: {
+            title: 'API de Produtos - Projeto Integrador VI',
+            version: '1.0.0',
+            description: 'API REST com CRUD completo de produtos, persistência via Sequelize e banco de dados relacional (SQLite).'
+        },
         components: {
             schemas: {
                 Produto: {
