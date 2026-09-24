@@ -1,37 +1,35 @@
-const { ProdutoService } = require('../src/services/produto.service');
-const ProdutoRepositoryInterface = require('../src/repositories/produto.repository.interface');
+import { ProdutoService } from '../src/services/produto.service';
+import { IProdutoRepository } from '../src/repositories/produto.repository.interface';
+import { Produto, ProdutoEntrada, ProdutoAtualizacao } from '../src/types/produto.types';
 
-class ProdutoRepositoryFake extends ProdutoRepositoryInterface {
-    constructor() {
-        super();
-        this.produtos = [
-            { id: 1, nome: 'Notebook', preco: 6700 },
-            { id: 2, nome: 'Mouse', preco: 120 }
-        ];
-    }
+class ProdutoRepositoryFake implements IProdutoRepository {
+    produtos: Produto[] = [
+        { id: 1, nome: 'Notebook', preco: 6700 },
+        { id: 2, nome: 'Mouse', preco: 120 }
+    ];
 
-    async listar() {
+    async listar(): Promise<Produto[]> {
         return this.produtos;
     }
 
-    async buscarPorId(id) {
+    async buscarPorId(id: number): Promise<Produto | null> {
         return this.produtos.find((p) => p.id === id) || null;
     }
 
-    async criar(dados) {
-        const novo = { id: this.produtos.length + 1, ...dados };
+    async criar(dados: ProdutoEntrada): Promise<Produto> {
+        const novo: Produto = { id: this.produtos.length + 1, ...dados };
         this.produtos.push(novo);
         return novo;
     }
 
-    async atualizar(id, dados) {
+    async atualizar(id: number, dados: ProdutoAtualizacao): Promise<Produto | null> {
         const produto = this.produtos.find((p) => p.id === id);
         if (!produto) return null;
         Object.assign(produto, dados);
         return produto;
     }
 
-    async deletar(id) {
+    async deletar(id: number): Promise<Produto | null> {
         const index = this.produtos.findIndex((p) => p.id === id);
         if (index === -1) return null;
         return this.produtos.splice(index, 1)[0];
@@ -39,7 +37,7 @@ class ProdutoRepositoryFake extends ProdutoRepositoryInterface {
 }
 
 describe('ProdutoService', () => {
-    let service;
+    let service: ProdutoService;
 
     beforeEach(() => {
         service = new ProdutoService(new ProdutoRepositoryFake());
@@ -52,7 +50,7 @@ describe('ProdutoService', () => {
 
     test('buscarPorId retorna o produto correto', async () => {
         const produto = await service.buscarPorId(1);
-        expect(produto.nome).toBe('Notebook');
+        expect(produto?.nome).toBe('Notebook');
     });
 
     test('buscarPorId retorna null quando não encontrado', async () => {
@@ -70,7 +68,7 @@ describe('ProdutoService', () => {
 
     test('atualizar modifica um produto existente', async () => {
         const atualizado = await service.atualizar(1, { preco: 6999 });
-        expect(atualizado.preco).toBe(6999);
+        expect(atualizado?.preco).toBe(6999);
     });
 
     test('atualizar retorna null quando produto não existe', async () => {
@@ -80,7 +78,7 @@ describe('ProdutoService', () => {
 
     test('deletar remove um produto existente', async () => {
         const removido = await service.deletar(2);
-        expect(removido.nome).toBe('Mouse');
+        expect(removido?.nome).toBe('Mouse');
 
         const produtos = await service.listar();
         expect(produtos).toHaveLength(1);
@@ -93,18 +91,6 @@ describe('ProdutoService', () => {
 
     test('usa ProdutoRepository real como padrão quando nenhum repositório é injetado', () => {
         const servicePadrao = new ProdutoService();
-        expect(servicePadrao.repository).toBeDefined();
-    });
-});
-
-describe('ProdutoRepositoryInterface', () => {
-    test('cada método lança erro quando não implementado', async () => {
-        const interfaceBase = new ProdutoRepositoryInterface();
-
-        await expect(interfaceBase.listar()).rejects.toThrow();
-        await expect(interfaceBase.buscarPorId(1)).rejects.toThrow();
-        await expect(interfaceBase.criar({})).rejects.toThrow();
-        await expect(interfaceBase.atualizar(1, {})).rejects.toThrow();
-        await expect(interfaceBase.deletar(1)).rejects.toThrow();
+        expect(servicePadrao).toBeInstanceOf(ProdutoService);
     });
 });

@@ -1,37 +1,38 @@
-const ProdutoRepositoryInterface = require('./produto.repository.interface');
-const ProdutoModel = require('../models/produto.model');
+import { IProdutoRepository } from './produto.repository.interface';
+import ProdutoModel from '../models/produto.model';
+import { Produto, ProdutoEntrada, ProdutoAtualizacao } from '../types/produto.types';
 
-class ProdutoRepository extends ProdutoRepositoryInterface {
-    async listar() {
+class ProdutoRepository implements IProdutoRepository {
+    async listar(): Promise<Produto[]> {
         return ProdutoModel.findAll();
     }
 
-    async buscarPorId(id) {
+    async buscarPorId(id: number): Promise<Produto | null> {
         return ProdutoModel.findByPk(id);
     }
 
-    async criar(dados) {
+    async criar(dados: ProdutoEntrada): Promise<Produto> {
         return ProdutoModel.create({
             nome: dados.nome,
             preco: dados.preco
         });
     }
 
-    async atualizar(id, dados) {
+    async atualizar(id: number, dados: ProdutoAtualizacao): Promise<Produto | null> {
         const produto = await ProdutoModel.findByPk(id);
 
         if (!produto) {
             return null;
         }
 
-        const camposAtualizados = {};
+        const camposAtualizados: ProdutoAtualizacao = {};
         if (dados.nome !== undefined) camposAtualizados.nome = dados.nome;
         if (dados.preco !== undefined) camposAtualizados.preco = dados.preco;
 
         return produto.update(camposAtualizados);
     }
 
-    async deletar(id) {
+    async deletar(id: number): Promise<Produto | null> {
         const produto = await ProdutoModel.findByPk(id);
 
         if (!produto) {
@@ -43,4 +44,4 @@ class ProdutoRepository extends ProdutoRepositoryInterface {
     }
 }
 
-module.exports = ProdutoRepository;
+export default ProdutoRepository;

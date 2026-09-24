@@ -1,13 +1,12 @@
-const swaggerJsdoc = require('swagger-jsdoc');
+import swaggerJsdoc from 'swagger-jsdoc';
+import path from 'path';
 
-const options = {
+const isCompiled = __filename.endsWith('.js');
+const routesGlob = path.join(__dirname, isCompiled ? '../routes/*.js' : '../routes/*.ts');
+
+const options: swaggerJsdoc.Options = {
     definition: {
         openapi: '3.0.0',
-        info: {
-            title: 'API de Produtos - Projeto Integrador VI',
-            version: '1.0.0',
-            description: 'API REST com CRUD completo de produtos, persistência via Sequelize e banco de dados relacional (SQLite).'
-        },
         info: {
             title: 'API de Produtos - Projeto Integrador VI',
             version: '1.0.0',
@@ -40,9 +39,9 @@ const options = {
             }
         }
     },
-    apis: ['./src/routes/*.js']
+    apis: [routesGlob]
 };
 
 const swaggerSpec = swaggerJsdoc(options);
 
-module.exports = swaggerSpec;
+export default swaggerSpec;

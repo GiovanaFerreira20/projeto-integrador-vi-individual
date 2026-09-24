@@ -1,7 +1,7 @@
-const express = require('express');
-const swaggerUi = require('swagger-ui-express');
-
-const swaggerSpec = require('./src/config/swagger');
+import express from 'express';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './src/config/swagger';
+import produtoRoutes from './src/routes/produto.routes';
 
 const app = express();
 
@@ -13,8 +13,6 @@ app.get('/api-docs.json', (req, res) => {
     res.status(200).json(swaggerSpec);
 });
 
-const produtoRoutes = require('./src/routes/produto.routes');
-
 app.use(produtoRoutes);
 
-module.exports = app;
+export default app;

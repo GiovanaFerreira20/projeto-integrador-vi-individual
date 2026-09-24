@@ -1,6 +1,6 @@
-const request = require('supertest');
-const app = require('../app');
-const sequelize = require('../src/config/database');
+import request from 'supertest';
+import app from '../app';
+import sequelize from '../src/config/database';
 
 describe('Documentação da API (Swagger)', () => {
     test('GET /api-docs.json retorna a especificação OpenAPI', async () => {

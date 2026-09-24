@@ -1,5 +1,5 @@
-const sequelize = require('../src/config/database');
-const ProdutoRepository = require('../src/repositories/produto.repository');
+import sequelize from '../src/config/database';
+import ProdutoRepository from '../src/repositories/produto.repository';
 
 describe('ProdutoRepository (integração com SQLite em memória)', () => {
     const repository = new ProdutoRepository();
@@ -35,7 +35,7 @@ describe('ProdutoRepository (integração com SQLite em memória)', () => {
         const criado = await repository.criar({ nome: 'Teclado', preco: 250 });
 
         const encontrado = await repository.buscarPorId(criado.id);
-        expect(encontrado.nome).toBe('Teclado');
+        expect(encontrado?.nome).toBe('Teclado');
     });
 
     test('buscarPorId retorna null quando não encontrado', async () => {
@@ -47,8 +47,16 @@ describe('ProdutoRepository (integração com SQLite em memória)', () => {
         const criado = await repository.criar({ nome: 'Monitor', preco: 900 });
 
         const atualizado = await repository.atualizar(criado.id, { preco: 850 });
-        expect(atualizado.preco).toBe(850);
-        expect(atualizado.nome).toBe('Monitor');
+        expect(atualizado?.preco).toBe(850);
+        expect(atualizado?.nome).toBe('Monitor');
+    });
+
+    test('atualizar altera somente o nome quando só ele é informado', async () => {
+        const criado = await repository.criar({ nome: 'Impressora', preco: 500 });
+
+        const atualizado = await repository.atualizar(criado.id, { nome: 'Impressora Laser' });
+        expect(atualizado?.nome).toBe('Impressora Laser');
+        expect(atualizado?.preco).toBe(500);
     });
 
     test('atualizar retorna null quando produto não existe', async () => {
@@ -56,19 +64,11 @@ describe('ProdutoRepository (integração com SQLite em memória)', () => {
         expect(resultado).toBeNull();
     });
 
-    test('atualizar altera somente o nome quando só ele é informado', async () => {
-        const criado = await repository.criar({ nome: 'Impressora', preco: 500 });
-
-        const atualizado = await repository.atualizar(criado.id, { nome: 'Impressora Laser' });
-        expect(atualizado.nome).toBe('Impressora Laser');
-        expect(atualizado.preco).toBe(500);
-    });
-
     test('deletar remove o produto', async () => {
         const criado = await repository.criar({ nome: 'Webcam', preco: 300 });
 
         const removido = await repository.deletar(criado.id);
-        expect(removido.nome).toBe('Webcam');
+        expect(removido?.nome).toBe('Webcam');
 
         const encontrado = await repository.buscarPorId(criado.id);
         expect(encontrado).toBeNull();

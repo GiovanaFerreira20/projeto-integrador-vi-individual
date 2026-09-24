@@ -1,8 +1,7 @@
-const express = require('express');
+import { Router } from 'express';
+import * as controller from '../controllers/produto.controller';
 
-const router = express.Router();
-
-const controller = require('../controllers/produto.controller');
+const router = Router();
 
 /**
  * @swagger
@@ -142,4 +141,4 @@ router.put('/produtos/:id', controller.atualizar);
  */
 router.delete('/produtos/:id', controller.deletar);
 
-module.exports = router;
+export default router;
